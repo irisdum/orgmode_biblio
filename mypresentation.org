@@ -1,0 +1,64 @@
+
+#+BIBLIOGRPAHY: change_detection plain
+#+TITLE: My TEMPLATE
+#+AUTHOR: IRIS DUMEUR
+#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:https://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+HTML_LINK_UP:
+#+HTML_LINK_HOME:
+#+startup: beamer
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [bigger]
+#+BEAMER_FRAME_LEVEL: 2
+#+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
+
+* Introduction
+** A simple slide
+This slide consists of some text with a number of bullet points:
+
+- the first, very @important@, point!
+- the previous point shows the use of the special markup which
+  translates to the Beamer specific /alert/ command for highlighting
+  text.
+
+We can cite a reference using the reftex function **reftex-citation**\cite{hamaguchi_rare_2018-1}
+
+
+** Using Blocks inside slides
+This is a more complex style of slides
+*** Org mode increases productivity                               :B_theorem:
+    :PROPERTIES:
+    :BEAMER_env: theorem
+    :END:
+    - org mode means not having to remember LaTeX commands.
+    - it is based on ascii text which is inherently portable.
+    - Emacs!
+*** Test                                                 :B_beamercolorbox:
+:PROPERTIES:
+:BEAMER_env: beamercolorbox
+:END:
+Where the test geoes
+
+** Insert images
+*** Image                                                 :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+
+[[file:logo_ar_battle.png]
+
+
+
+** A new Type of blocks
+qlksnd
+
+
+
+
+
+
+* 
+
