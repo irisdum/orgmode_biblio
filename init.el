@@ -1,3 +1,11 @@
+
+;; You will most likely need to adjust this font size for your system!
+(defvar efs/default-font-size 180)
+(defvar efs/default-variable-font-size 180)
+
+;; Make frame transparency overridable
+(defvar efs/frame-transparency '(90 . 90))
+
 (setq inhibit-startup-message t)
 
 (scroll-bar-mode -1)        ; Disable visible scrollbar
@@ -10,7 +18,7 @@
 ;; Set up the visible bell
 (setq visible-bell t)
 
-(set-face-attribute 'default nil :font "Menlo" :height 150)
+
 
 (load-theme 'misterioso)
 
@@ -82,8 +90,8 @@
                   (org-level-5 . 1.1)
                   (org-level-6 . 1.1)
                   (org-level-7 . 1.1)
-                  (org-level-8 . 1.1)))
-    (set-face-attribute (car face) nil :font "Menlo" :weight 'regular :height (cdr face)))
+                  (org-level-8 . 1.1))))
+   ; (set-face-attribute (car face) nil :font "Menlo" :weight 'regular :height (cdr face)))
 
   ;; Ensure that anything that should be fixed-pitch in Org files appears that way
   (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
@@ -113,23 +121,19 @@
 
 (use-package visual-fill-column
   :hook (org-mode . efs/org-mode-visual-fill))
+(add-hook 'org-mode-hook #'turn-on-org-cdlatex)
 
 ;;(require 'org)
-(require 'ol-bibtex)
-(setq org-latex-pdf-process '("texi2dvi -p -b -V %f"))
+;(require 'ol-bibtex)
+;(setq org-latex-pdf-process '("texi2dvi -p -b -V %f"))
 ;;(define-key org-mode-map (kbd "C-c [") 'org-reftex-citation)
 
-(setq reftex-default-bibliography '("/Users/iris/Code/orgmode_tutorial/change_detection.bib"))
+(setq reftex-default-bibliography '("/home/dumeuri/Documents/orgmode_biblio/favorites.bib"))
 
 ;; see org-ref for use of these variables
-(setq org-ref-default-bibliography '("/Users/iris/Code/orgmode_tutorial/change_detection.bib"))
-
-
-
-;; Pour mac uniquement1
-(setq mac-option-modifier nil
-      mac-command-modifier 'meta
-      x-select-enable-clipboard t)
+(setq org-ref-default-bibliography '("/home/dumeuri/Documents/orgmode_biblio/favorites.bib"))
+(setq org-latex-pdf-process
+  '("latexmk -pdflatex='pdflatex -interaction nonstopmode' -pdf -bibtex -f %f"))
 
 
 
@@ -141,6 +145,3 @@
                "\\documentclass{article}"
                ("\\section{%s}" . "\\section*{%s}")))
 
-
-  
-(setenv "PATH"(concat(getenv"PATH")"~/Library/TeXShop/bin/"))

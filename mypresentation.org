@@ -2,8 +2,8 @@
 #+BIBLIOGRPAHY: change_detection plain
 #+TITLE: My TEMPLATE
 #+AUTHOR: IRIS DUMEUR
-#+OPTIONS:   H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
-#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+EMAIL: iris.dumeur@cesbio.cnes.fr
+#+OPTIONS: H:2 toc:t num:t
 #+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:https://orgmode.org/org-info.js
 #+EXPORT_SELECT_TAGS: export
 #+EXPORT_EXCLUDE_TAGS: noexport
@@ -11,54 +11,213 @@
 #+HTML_LINK_HOME:
 #+startup: beamer
 #+LaTeX_CLASS: beamer
-#+LaTeX_CLASS_OPTIONS: [bigger]
+#+LaTeX_CLASS_OPTIONS: [presentation]
+
 #+BEAMER_FRAME_LEVEL: 2
-#+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
 
-* Introduction
-** A simple slide
-This slide consists of some text with a number of bullet points:
+#+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extran)
+#+LaTeX_HEADER: \usepackage[backend=bibtex,sorting=none]{biblatex}
+#+LaTeX_HEADER: \AtEveryBibitem{\clearfield{note}}
+#+LaTeX_HEADER: \addbibresource{favorites.bib}  %% point at your bib file
+#+LaTeX_HEADER: \bibliography{favorites}
+#+LaTeX_HEADER: \bibliographystyle{plain}
 
-- the first, very @important@, point!
-- the previous point shows the use of the special markup which
-  translates to the Beamer specific /alert/ command for highlighting
-  text.
+* Attention mechanism
+** Plan
 
-We can cite a reference using the reftex function **reftex-citation**\cite{hamaguchi_rare_2018-1}
-
-
-** Using Blocks inside slides
-This is a more complex style of slides
-*** Org mode increases productivity                               :B_theorem:
-    :PROPERTIES:
-    :BEAMER_env: theorem
-    :END:
-    - org mode means not having to remember LaTeX commands.
-    - it is based on ascii text which is inherently portable.
-    - Emacs!
-*** Test                                                 :B_beamercolorbox:
+1. *Attention mechanism:* Tranformer architecture, spatio temporal attention 
+2. *Latent space description* : VAE, disantangled representation
+3. *Variational Attentional mechanism* : learn the distribution of the attention
+4. *Data description* : Sentinel 2 13 bands, preprocessing
+5. *Questions*
+** Attention mechanism generalities
+*** Principle :B_definition:
 :PROPERTIES:
-:BEAMER_env: beamercolorbox
+:BEAMER_env: definition
 :END:
-Where the test geoes
+Attention is one component of a model charge and managing and quantifying the interdependence
+Enables the network to retainf focus on thiose elements that are relevat "queries"(decoder output)
+*** Some maths ... :B_example:
+:PROPERTIES:
+:BEAMER_env: example
+:END:
+$s_{t-1}$ is he previous devoder output
+$e_{t,i}=a(s_{t-a h_i})$ $e_{t,i}$ how well the emeùent of the input seq i align with the current output position
+$\alpha_{t,i}=softmax(e_{t,i})$ Compute then a contexte vector $c_{t}$ which is fed into the decoder at eeach time step : $c_{t}=\sum_{i=1}^{T}\alpha_{t,i}h_{i}$
 
-** Insert images
-*** Image                                                 :B_ignoreheading:
+** Attention mechanism : self-attention 
+*** Definition :B_definition:
+:PROPERTIES:
+:BEAMER_env: definition
+:END:
+Self attention is an attention mechanism applied to only one sequence. Determines the intra dependance. 
+To obtain such a decomposition of the input between keys query and values, matrix are learned trough the prcess ? 
+*** Self attention gif :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+[[https://miro.medium.com/max/700/1*G8thyDVqeD8WHim_QzjvFg.gif]]
+** Attention mechanism - Hard vs Soft
+
+https://towardsdatascience.com/attention-in-neural-networks-e66920838742
+*** Image :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+#+ATTR_LATEX: :width 10cm 
+[[file:images/hardvssofattention.png]]
+** Attention mechanism - Transformers
+Multi-Head self attention model defined in \cite{Vaswani2017}. Use Attention but faster than RNN layers in term of complexity (ability to parallelize)
+
+*** How they use attention :B_example:
+:PROPERTIES:
+:BEAMER_env: example
+:END:
+- *Encoder Decoder Attention* : Q from previous decoder layer and K and V comes from en the encoder's output. 
+- *Encoder self Attention* : K,V, and Q comes from the previous layer in the encoder. /"each position in the encoder can attend to all position in the previous layer in the encoder"\cite{Vaswani2017}/. 
+- *Self Attention in the Decoder*
+** Attention mechanism - Transformer architecture
+*** Image :B_ignoreheading:
 :PROPERTIES:
 :BEAMER_env: ignoreheading
 :END:
 
-[[file:logo_ar_battle.png]
+#+ATTR_LATEX: :width 7cm 
+[[file:images/Transformer_global_archi.png]]
+
+** Attention an exemple on time series
+Attention mechanism analysis with \cite{russwurm}. 
+*** What they achieve :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+- Comparison of the performance of various model in a supervised task of crop classification. Dataset : mean value of S2 13 bands within the boundary of the parcel. 
+- Compare how each model perfom on L1C product or L1C +GAF AG processing. 
+- /"Self attention is a key tool in supressing non-classification relevant cloudy observations" /
+
+*** Image :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+ [[file:images/compare_attentionmechanism.png]]
+
+** Attention mechanism an exemple on time series
+*** Image :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+[[file:images/compare_attention_DuPlo_Transformer.png]]
+** Spatio-Temporal Attention 
+Proposition a NN for supervised task using spatio and temporal attention. \cite{panoptic}
+*** What they achieve :B_beamercolorbox:
+:PROPERTIES:
+:BEAMER_env: beamercolorbox
+:END:
+- Upsampling of the temporal attention mechanism into the NN upper level
+- Supervised training
+*** Image :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+[[file:images/spatiotempglobaarchi.png]]
+** Spatio-temporal Attention - LTAE architecture
+- Architecture defined in \cite{ltae}
+*** Image :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+[[file:images/late_module.png]]
+* Latent space representation
+** VAE Training
+This generative model is defined in \cite{Kingma2013}
+*** Principe :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+- $x$ is the entry from the enocder. The encoder gives a distribution parameters ($\mu$ and $\sigma$ given $x$. A random sampling is done in this distribution. The value sampled is placed in the decoder which outputs a prediction (trained to be as close as possible from $x$). 
+- In order to train this model (with backprop) : reparametrization trick $\tilde{z}=\mu+\epsilon*\sigma$ with $ \epsilon ~N(0,1)$
+- To optimize the likehood of such a model $\iff$ to train the NN with a reconstruction loss and a dispersion loss
+** Latent space description
+Able to characterize latent space \cite{Hou2016}.
+
+*** Ideas :B_exampleblock:
+:PROPERTIES:
+:BEAMER_env: exampleblock
+:END:
+- Once model trained, feed him with data given a certain features ex: $z_{yes glasses}, z_{no glasses}$
+- Define feature  specific latent vector as $z_{glasses}=z_{yes glasses}- z_{no glasses}$
+- Reconstruction of possible images using $z+\alpha z_{glasses}$ 
+
+*** Image :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:BEAMER_col: 0.5
+:END:
+
+#+CAPTION: 
+#+ATTR_LATEX: :width 7cm 
+[[file:images/deepfeatures_latentspace.png]]
 
 
+** Feature of the latent space 
+*** Idea :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+  - Repeat the previsous step for 13 features. Compute the correaltion between the latet vector found
+- Obtain consitent results
 
-** A new Type of blocks
-qlksnd
+** Attention mechanism with VAE
+*** Idea :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+- Attention mechanism between encoder and decoder "bypassing phenomenon"\cite{att_vae}
+- Creation of a variational attention mechanism 
+*** Image :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+[[file:images/att_vae.png]]
+** Latent space description : exemple in change detection
+*** Principe :B_block:
+:PROPERTIES:
+:BEAMER_env: block
+:END:
+- Using AE, VAE and GAN principle to build create a disantangled representation of two images \cite{disantangledSanchez}
+- Shows that the disantangled representation is coherent for tasks of image segmentation, image classification, change detectioon
+*** Image :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+[[file:images/disantangled.png]]
+** Latent space description : exemple in change detection
+*** For us :B_alertblock:
+:PROPERTIES:
+:BEAMER_env: alertblock
+:END:
+- We are working with SITS which means a higher amount of data compared of pairs of image. Need to find a way to compress SITS before using this NN
+- This a good idea of a pretext task. If working with SITS we could be able to learn temporal attention 
 
 
+* Datasets
+** Band S2
+** Processing S2
+** Time series or spatial 
+* Questions                                                 :B_ignoreheading:
+:PROPERTIES:
+:BEAMER_env: ignoreheading
+:END:
+** Theorical questions
+- Improve comprehension of attention mechanism, spatial attention mechanism
+** References :B_frame:
+:PROPERTIES:
+:BEAMER_env: frame
+:UNNUMBERED: t
+:BEAMER_opt: allowframebreaks,label=
+:END:
 
-
-
-
-* 
-
+ #+BEGIN_COMMENT
+References
+ #+END_COMMENT
+#+LaTex: \printbibliography
